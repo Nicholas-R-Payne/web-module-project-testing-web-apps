@@ -80,9 +80,34 @@ test('renders "lastName is a required field" if an last name is not entered and 
     expect(errorMessage).toBeInTheDocument;
 });
 
-// test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
+test('renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.', async () => {
+    render(<ContactForm/>);
 
-// });
+    const firstNameField = screen.getByLabelText(/First Name*/i);
+    userEvent.type(firstNameField, 'nicholas');
+
+    const lastNameField = screen.getByLabelText(/Last Name*/i);
+    userEvent.type(lastNameField, 'payne');
+
+    const emailField = screen.getByLabelText(/email*/i);
+    userEvent.type(emailField, 'nicholas@gmail.com');
+
+    const submitButton = screen.getByRole('button');
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+        const firstNameDisplay = screen.queryByText('nicholas');
+        const lastNameDisplay = screen.queryByText('payne');
+        const emailDisplay = screen.queryByText('nicholas@gmail.com');
+        const messageDisplay = screen.queryByText('messageDisplay');
+
+        expect(firstNameDisplay).toBeInTheDocument();
+        expect(lastNameDisplay).toBeInTheDocument();
+        expect(emailDisplay).toBeInTheDocument();
+        expect(messageDisplay).not.toBeInTheDocument();
+    });
+
+});
 
 // test('renders all fields text when all fields are submitted.', async () => {
 
